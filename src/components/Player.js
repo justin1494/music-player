@@ -5,6 +5,7 @@ import {
   faAngleLeft,
   faAngleRight,
   faPause,
+  faVolumeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Player = ({
@@ -22,6 +23,7 @@ const Player = ({
     duration: 0,
     animationPercentage: 0,
   });
+  const [songVolume, setSongVolume] = useState(50);
 
   const activeLibraryHandler = (nextPrev) => {
     const newSongs = songs.map((song) => {
@@ -45,6 +47,9 @@ const Player = ({
     if (isPlaying === false) {
       audioRef.current.play();
       setIsPlaying(!isPlaying);
+
+      //control volume
+      audioRef.current.volume = 0.1;
     } else {
       audioRef.current.pause();
       setIsPlaying(!isPlaying);
@@ -79,6 +84,11 @@ const Player = ({
     setSongInfo({ ...songInfo, currentTime: e.target.value });
   };
 
+  const volumeHandler = (e) => {
+    audioRef.current.volume = e.target.value / 100;
+    setSongVolume(e.target.value);
+  };
+
   const skipTrackHandler = async (direction) => {
     let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
     if (direction === "skip-forward") {
@@ -101,6 +111,7 @@ const Player = ({
   const songEndHandler = async () => {
     let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
     await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
+    activeLibraryHandler(songs[(currentIndex + 1) % songs.length]);
     setTimeout(() => {
       if (isPlaying) audioRef.current.play();
     }, 100);
@@ -129,6 +140,11 @@ const Player = ({
           <div style={trackAnim} className="animate-track"></div>
         </div>
         <p>{songInfo.duration ? convertTime(songInfo.duration) : "0:00"}</p>
+      </div>
+      <div className="volume-control">
+        <FontAwesomeIcon icon={faVolumeHigh} />
+        <input min={0} max={100} onChange={volumeHandler} type="range" />
+        <p>{`${songVolume}%`}</p>
       </div>
       <div className="play-control">
         <FontAwesomeIcon
