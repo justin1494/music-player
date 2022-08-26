@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .time-control {
@@ -16,10 +16,14 @@
     width: 100%;
     padding: 1rem 0;
     cursor: pointer;
+    -webkit-appearance: none;
+    background-color: transparent;
   }
 
   p {
-    padding: 1rem;
+    // padding: 1rem;
+    text-align: center;
+    width: 90px;
   }
 }
 
@@ -32,4 +36,33 @@
   svg {
     cursor: pointer;
   }
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  height: 16px;
+  width: 16px;
+}
+
+.track {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 1rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: lightblue;
+}
+
+.animate-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(220, 220, 220);
+  transform: translateX(0%);
+  pointer-events: none;
 }

@@ -1,6 +1,8 @@
 @use "./song";
 @use "./player";
-@use "./library"; 
+@use "./library";
+@use "./nav"; 
+
 
 * {
   margin: 0;
