@@ -1,8 +1,7 @@
 @use "./song";
 @use "./player";
 @use "./library";
-@use "./nav"; 
-
+@use "./nav";
 
 * {
   margin: 0;
@@ -10,8 +9,7 @@
   box-sizing: border-box;
 }
 body {
-  font-family: 'Montserrat', sans-serif;
-
+  font-family: "Montserrat", sans-serif;
 }
 
 h1,
@@ -20,7 +18,16 @@ h3 {
   color: rgb(54, 54, 54);
 }
 
-h3,h4 {
+h3,
+h4 {
   font-weight: 400;
   color: rgb(100, 100, 100);
+}
+
+.App {
+  transition: all 0.5s ease;
+}
+
+.library-active{
+  margin-left: 30%;
 }
