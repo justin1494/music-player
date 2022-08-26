@@ -3,6 +3,9 @@
 @use "./library";
 @use "./nav";
 
+$background-dark : #1F2124;
+$background-light: white;
+
 * {
   margin: 0;
   padding: 0;
