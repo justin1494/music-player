@@ -6,7 +6,6 @@ const Library = ({ songs, currentSongId, setCurrentSong, libraryStatus }) => {
     (song) => setCurrentSong(song),
     [setCurrentSong]
   );
-  console.log(songs)
   return (
     <div className={`library ${libraryStatus ? "active-library" : ""}`}>
       <h2>Songs library</h2>
