@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
@@ -10,12 +10,8 @@ import {
 
 const Player = ({
   currentSong,
-  setIsPlaying,
-  isPlaying,
-  audioRef,
-  songs,
   setCurrentSong,
-  setSongs,
+  songs,
 }) => {
   // State
   const [songInfo, setSongInfo] = useState({
@@ -24,37 +20,30 @@ const Player = ({
     animationPercentage: 0,
   });
   const [songVolume, setSongVolume] = useState(50);
-
-  const activeLibraryHandler = (nextPrev) => {
-    const newSongs = songs.map((song) => {
-      if (song.id === nextPrev.id) {
-        return {
-          ...song,
-          active: true,
-        };
-      } else {
-        return {
-          ...song,
-          active: false,
-        };
-      }
-    });
-    setSongs(newSongs);
-  };
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   // Event Handlers
   const playSongHandler = () => {
-    if (isPlaying === false) {
-      audioRef.current.play();
+    if (!isPlaying) {
       setIsPlaying(!isPlaying);
 
       //control volume
       audioRef.current.volume = 0.1;
     } else {
-      audioRef.current.pause();
       setIsPlaying(!isPlaying);
     }
   };
+
+  /* Tutaj bardzo upraszający wszystko kod. We wszystkich miejscach w aplikacji wystarczy 
+     ze będziesz operował isPlaying, a ten useEffect będzie odpalał/zatrzymywał player zależnie od jego wartości. */
+  useEffect(()=> {
+    if(isPlaying) {
+      audioRef.current.play();
+    }else {
+      audioRef.current.pause();
+    }
+  },[currentSong, isPlaying]);
 
   const timeUpdateHandler = (e) => {
     const current = e.target.currentTime;
@@ -92,29 +81,16 @@ const Player = ({
   const skipTrackHandler = async (direction) => {
     let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
     if (direction === "skip-forward") {
-      await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
-      activeLibraryHandler(songs[(currentIndex + 1) % songs.length]);
+      const index = (currentIndex + 1) % songs.length;
+      await setCurrentSong(songs[index]); // Po co await tutaj?
+    } else if (direction === "skip-back") {
+      const index = currentIndex === 0 ? songs.length - 1 : (currentIndex - 1) % songs.length;
+      await setCurrentSong(songs[index]);
     }
-    if (direction === "skip-back") {
-      if (currentIndex - 1 === -1) {
-        await setCurrentSong(songs[songs.length - 1]);
-        activeLibraryHandler(songs[songs.length - 1]);
-        if (isPlaying) audioRef.current.play();
-        return;
-      }
-      await setCurrentSong(songs[(currentIndex - 1) % songs.length]);
-      activeLibraryHandler(songs[(currentIndex - 1) % songs.length]);
-    }
-    if (isPlaying) audioRef.current.play();
   };
 
   const songEndHandler = async () => {
-    let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
-    await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
-    activeLibraryHandler(songs[(currentIndex + 1) % songs.length]);
-    setTimeout(() => {
-      if (isPlaying) audioRef.current.play();
-    }, 100);
+    skipTrackHandler("skip-forward")
   };
   // Add the styles
   const trackAnim = {

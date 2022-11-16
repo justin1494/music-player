@@ -1,30 +1,25 @@
-import React from "react";
+import React, { useCallback } from "react";
 import LibrarySong from "./LibrarySong";
 
 const Library = ({
   songs,
+  currentSongId,
   setCurrentSong,
-  audioRef,
-  isPlaying,
-  setSongs,
   libraryStatus,
 }) => {
+  const songSelectHandler = useCallback((song) => setCurrentSong(song), [setCurrentSong]);
   return (
     <div className={`library ${libraryStatus ? "active-library" : ""}`}>
       <h2>Songs library</h2>
       <div className="library-songs">
         {songs.map((song) => (
-          <LibrarySong
-            song={song}
-            setCurrentSong={setCurrentSong}
-            songs={songs}
-            id={song.id}
-            key={song.id}
-            audioRef={audioRef}
-            isPlaying={isPlaying}
-            setSongs={setSongs}
-          />
-        ))}
+            <LibrarySong
+              key={song.id}
+              song={song}
+              isActive={song.id === currentSongId}
+              onSongSelect={() => songSelectHandler(song)}
+            />
+          ))}
       </div>
     </div>
   );
