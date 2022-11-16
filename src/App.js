@@ -10,11 +10,10 @@ import Nav from "./components/Nav";
 // import Util
 import getSongs from "./data";
 
-
 function App() {
   const songs = useMemo(() => getSongs(), []);
-  console.log(songs)
-  // state 1
+  console.log(songs);
+  // state
   const [currentSong, setCurrentSong] = useState(songs[0]);
   const [libraryStatus, setLibraryStatus] = useState(false);
   const toggleLibraryStatus = () => setLibraryStatus(!libraryStatus);
