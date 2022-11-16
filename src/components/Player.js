@@ -8,11 +8,7 @@ import {
   faVolumeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Player = ({
-  currentSong,
-  setCurrentSong,
-  songs,
-}) => {
+const Player = ({ currentSong, setCurrentSong, songs }) => {
   // State
   const [songInfo, setSongInfo] = useState({
     currentTime: 0,
@@ -37,13 +33,13 @@ const Player = ({
 
   /* Tutaj bardzo upraszający wszystko kod. We wszystkich miejscach w aplikacji wystarczy 
      ze będziesz operował isPlaying, a ten useEffect będzie odpalał/zatrzymywał player zależnie od jego wartości. */
-  useEffect(()=> {
-    if(isPlaying) {
+  useEffect(() => {
+    if (isPlaying) {
       audioRef.current.play();
-    }else {
+    } else {
       audioRef.current.pause();
     }
-  },[currentSong, isPlaying]);
+  }, [currentSong, isPlaying]);
 
   const timeUpdateHandler = (e) => {
     const current = e.target.currentTime;
@@ -78,19 +74,22 @@ const Player = ({
     setSongVolume(e.target.value);
   };
 
-  const skipTrackHandler = async (direction) => {
+  const skipTrackHandler = (direction) => {
     let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
     if (direction === "skip-forward") {
       const index = (currentIndex + 1) % songs.length;
-      await setCurrentSong(songs[index]); 
+      setCurrentSong(songs[index]);
     } else if (direction === "skip-back") {
-      const index = currentIndex === 0 ? songs.length - 1 : (currentIndex - 1) % songs.length;
-      await setCurrentSong(songs[index]);
+      const index =
+        currentIndex === 0
+          ? songs.length - 1
+          : (currentIndex - 1) % songs.length;
+      setCurrentSong(songs[index]);
     }
   };
 
-  const songEndHandler = async () => {
-    skipTrackHandler("skip-forward")
+  const songEndHandler = () => {
+    skipTrackHandler("skip-forward");
   };
   // Add the styles
   const trackAnim = {
@@ -147,8 +146,7 @@ const Player = ({
         onLoadedMetadata={timeUpdateHandler}
         ref={audioRef}
         src={currentSong.audio}
-        onEnded={songEndHandler}
-      ></audio>
+        onEnded={songEndHandler}></audio>
     </div>
   );
 };

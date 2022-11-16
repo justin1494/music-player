@@ -13,7 +13,7 @@ import getSongs from "./data";
 function App() {
   const songs = useMemo(() => getSongs(), []);
   console.log(songs);
-  // state 123
+  // state
   const [currentSong, setCurrentSong] = useState(songs[0]);
   const [libraryStatus, setLibraryStatus] = useState(false);
   const toggleLibraryStatus = () => setLibraryStatus(!libraryStatus);
