@@ -82,7 +82,7 @@ const Player = ({
     let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
     if (direction === "skip-forward") {
       const index = (currentIndex + 1) % songs.length;
-      await setCurrentSong(songs[index]); // Po co await tutaj?
+      await setCurrentSong(songs[index]); 
     } else if (direction === "skip-back") {
       const index = currentIndex === 0 ? songs.length - 1 : (currentIndex - 1) % songs.length;
       await setCurrentSong(songs[index]);
